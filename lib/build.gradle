@@ -21,4 +21,5 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     implementation('org.web3j:core:4.9.7')
     implementation files("libs/caver-java-v1.10.0.jar")
+    implementation files("libs/opensdk-governance-java-v1.10.0.jar")
 }
