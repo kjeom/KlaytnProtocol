@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Async;
 import opensdk.sdk.apis.GovernanceApi;
 
@@ -52,4 +54,18 @@ public class KlaytnWeb3j extends JsonRpc2_0Web3j{
         return new KlaytnWeb3j(web3jService, pollingInterval, scheduledExecutorService);
     }
 
+    @Override
+    public Request<?, EthSendTransaction> ethSendRawTransaction(String signedTransactionData) {
+        long txType = 0;
+        try {
+            txType = Long.parseUnsignedLong(signedTransactionData.substring(0, 1), 16);
+        } catch (NumberFormatException e) {
+            // something
+        }
+        // Klaytn transaction type
+        if(8 <= txType && txType <= 74) {
+            return klay.sendRawTransaction(signedTransactionData);
+        }
+        return super.ethSendRawTransaction(signedTransactionData);
+    }
 }
